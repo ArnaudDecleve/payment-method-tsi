@@ -1,6 +1,7 @@
 package com.payline.payment.tsi.service;
 
 import com.payline.payment.tsi.TsiConstants;
+import com.payline.payment.tsi.exception.ExternalCommunicationException;
 import com.payline.payment.tsi.response.TsiGoResponseTest;
 import com.payline.payment.tsi.utils.http.JsonHttpClient;
 import com.payline.payment.tsi.utils.http.ResponseMocker;
@@ -60,7 +61,7 @@ public class ConfigurationServiceImplTest {
     }
 
     @Test
-    public void testCheck_ok() throws IOException, URISyntaxException {
+    public void testCheck_ok() throws IOException, URISyntaxException, ExternalCommunicationException {
         // given: valid contract properties (TSI should then respond with a status=1)
         ContractParametersCheckRequest checkRequest = ConfigurationServiceImplTest.setupCheckRequest( parameters );
         String responseBody = TsiGoResponseTest.mockJson( 1, "OK", "http://redirect-url.com", null, null );
@@ -76,7 +77,7 @@ public class ConfigurationServiceImplTest {
     }
 
     @Test
-    public void testCheck_wrongAccountData() throws IOException, URISyntaxException {
+    public void testCheck_wrongAccountData() throws IOException, URISyntaxException, ExternalCommunicationException {
         // given: contract properties with the right format but not valid (TSI should then respond with a status != 1)
         ContractParametersCheckRequest checkRequest = ConfigurationServiceImplTest.setupCheckRequest( parameters );
         String responseBody = TsiGoResponseTest.mockJson( 15, "WRONG MAC", null, null, null );
@@ -92,7 +93,7 @@ public class ConfigurationServiceImplTest {
     }
 
     @Test
-    public void testCheck_unknownError() throws IOException, URISyntaxException {
+    public void testCheck_unknownError() throws IOException, URISyntaxException, ExternalCommunicationException {
         // given: contract properties validation encounter an unexpected error (Server unavailable for example)
         ContractParametersCheckRequest checkRequest = ConfigurationServiceImplTest.setupCheckRequest( parameters );
         StringResponse response = ResponseMocker.mockString( 503, "Server Unavailable", null );

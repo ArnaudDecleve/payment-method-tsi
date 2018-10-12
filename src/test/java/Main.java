@@ -1,5 +1,6 @@
 package com.payline.payment.tsi.request;
 
+import com.payline.payment.tsi.exception.ExternalCommunicationException;
 import com.payline.payment.tsi.response.TsiGoResponse;
 import com.payline.payment.tsi.security.Hmac;
 import com.payline.payment.tsi.security.HmacAlgorithm;
@@ -20,7 +21,7 @@ public class Main {
     public static Properties config;
     public static Properties testConfig;
 
-    public static void main( String[] args ) throws IOException, GeneralSecurityException, URISyntaxException {
+    public static void main( String[] args ) throws IOException, GeneralSecurityException, URISyntaxException, ExternalCommunicationException {
         config = new Properties();
         config.load( Main.class.getClassLoader().getResourceAsStream( "config.properties" ) );
 
@@ -61,7 +62,7 @@ public class Main {
         System.out.println( hmac.digest( message ) );
     }
 
-    private static void http() throws IOException, GeneralSecurityException, URISyntaxException {
+    private static void http() throws IOException, GeneralSecurityException, URISyntaxException, ExternalCommunicationException {
         JsonHttpClient httpClient = new JsonHttpClient( 5, 10, 15 );
 
         // Build request

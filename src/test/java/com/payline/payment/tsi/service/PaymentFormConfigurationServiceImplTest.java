@@ -44,7 +44,7 @@ public class PaymentFormConfigurationServiceImplTest {
     @Test
     public void testGetLogo() throws IOException {
         // when: getLogo is called
-        PaymentFormLogo paymentFormLogo = service.getLogo( Locale.getDefault() );
+        PaymentFormLogo paymentFormLogo = service.getLogo("", Locale.getDefault() );
 
         // then: returned elements are not null
         Assert.assertNotNull( paymentFormLogo );
@@ -69,7 +69,6 @@ public class PaymentFormConfigurationServiceImplTest {
         // then: returned elements match the image file data
         Assert.assertTrue( paymentFormLogoResponse instanceof PaymentFormLogoResponseFile);
         PaymentFormLogoResponseFile casted = (PaymentFormLogoResponseFile) paymentFormLogoResponse;
-        Assert.assertEquals( guessedContentType, casted.getContentType() );
         Assert.assertEquals( image.getHeight(), casted.getHeight() );
         Assert.assertEquals( image.getWidth(), casted.getWidth() );
         Assert.assertNotNull( casted.getTitle() );

@@ -42,7 +42,6 @@ public class PaymentFormConfigurationServiceImpl implements PaymentFormConfigura
         I18nService i18n = I18nService.getInstance();
 
         return PaymentFormLogoResponseFile.PaymentFormLogoResponseFileBuilder.aPaymentFormLogoResponseFile()
-                .withContentType( LOGO_CONTENT_TYPE )
                 .withHeight( LOGO_HEIGHT )
                 .withWidth( LOGO_WIDTH )
                 .withTitle( i18n.getMessage( "formConfiguration.logo.title", paymentFormLogoRequest.getLocale() ) )
@@ -51,14 +50,19 @@ public class PaymentFormConfigurationServiceImpl implements PaymentFormConfigura
     }
 
     @Override
-    public PaymentFormLogo getLogo( Locale locale ) throws IOException {
+    public PaymentFormLogo getLogo(String paymentMehodIdentifier, Locale locale ) {
         // Read logo file
         InputStream input = PaymentFormConfigurationServiceImpl.class.getClassLoader().getResourceAsStream( "ticketpremium-logo.png" );
-        BufferedImage logo = ImageIO.read( input );
+        ByteArrayOutputStream baos = null;
+        try {
+            BufferedImage logo = ImageIO.read( input );
 
-        // Recover byte array from image
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write( logo, "png", baos );
+            // Recover byte array from image
+            baos = new ByteArrayOutputStream();
+            ImageIO.write( logo, "png", baos );
+        } catch (IOException e) {
+            throw new IllegalStateException();
+        }
 
         return PaymentFormLogo.PaymentFormLogoBuilder.aPaymentFormLogo()
                 .withFile( baos.toByteArray() )

@@ -1,5 +1,6 @@
 package com.payline.payment.tsi.service;
 
+import com.payline.payment.tsi.exception.ExternalCommunicationException;
 import com.payline.payment.tsi.exception.InvalidRequestException;
 import com.payline.payment.tsi.request.TsiStatusCheckRequest;
 import com.payline.payment.tsi.request.TsiStatusCheckRequestTest;
@@ -56,7 +57,7 @@ public class PaymentWithRedirectionServiceImplTest {
     }
 
     @Test
-    public void testFinalizeRedirectionPayment_ok() throws IOException, URISyntaxException {
+    public void testFinalizeRedirectionPayment_ok() throws IOException, URISyntaxException, ExternalCommunicationException {
         // when: the HTTP call is a success
         StringResponse response = this.mockResponse( 200, "OK", "OK", 0, "SUCCESSFUL TRANSACTION FOUND" );
         when( httpClient.doPost( anyString(), anyString(), anyString(), anyString() ) )
@@ -80,7 +81,7 @@ public class PaymentWithRedirectionServiceImplTest {
     }
 
     @Test
-    public void testFinalizeRedirectionPayment_notFound() throws IOException, URISyntaxException {
+    public void testFinalizeRedirectionPayment_notFound() throws IOException, URISyntaxException, ExternalCommunicationException {
         // when: the HTTP call returns a business error ("transaction not found" for example)
         StringResponse response = this.mockResponse( 200, "OK", "NOK", 1, "NO SUCCESSFUL TRANSACTIONS FOUND WITHIN 6 MONTHS" );
         when( httpClient.doPost( anyString(), anyString(), anyString(), anyString() ) )
@@ -93,7 +94,7 @@ public class PaymentWithRedirectionServiceImplTest {
     }
 
     @Test
-    public void testFinalizeRedirectionPayment_businessError() throws IOException, URISyntaxException {
+    public void testFinalizeRedirectionPayment_businessError() throws IOException, URISyntaxException, ExternalCommunicationException {
         // when: an error happened on the partner side during the HTTP call
         StringResponse response = this.mockResponse( 200, "OK", "ER", 106, "MISSING MAC" );
         when( httpClient.doPost( anyString(), anyString(), anyString(), anyString() ) )
@@ -107,7 +108,7 @@ public class PaymentWithRedirectionServiceImplTest {
 
 
     @Test
-    public void testFinalizeRedirectionPayment_noResponseBody() throws IOException, URISyntaxException {
+    public void testFinalizeRedirectionPayment_noResponseBody() throws IOException, URISyntaxException, ExternalCommunicationException {
         // when: the HTTP call returns a response without a body
         StringResponse response = this.mockResponse( 200, "OK", null, null, null );
         when( httpClient.doPost( anyString(), anyString(), anyString(), anyString() ) )
@@ -120,7 +121,7 @@ public class PaymentWithRedirectionServiceImplTest {
     }
 
     @Test
-    public void testFinalizeRedirectionPayment_httpError() throws IOException, URISyntaxException {
+    public void testFinalizeRedirectionPayment_httpError() throws IOException, URISyntaxException, ExternalCommunicationException {
         // when: the HTTP call an error (503 Service Unavailable for example)
         StringResponse response = this.mockResponse( 503, "Service Unavailable", null, null, null );
         when( httpClient.doPost( anyString(), anyString(), anyString(), anyString() ) )
@@ -133,7 +134,7 @@ public class PaymentWithRedirectionServiceImplTest {
     }
 
     @Test
-    public void testFinalizeRedirectionPayment_ioException() throws IOException, URISyntaxException {
+    public void testFinalizeRedirectionPayment_ioException() throws IOException, URISyntaxException, ExternalCommunicationException {
         // when: the HTTP call throws an exception
         when( httpClient.doPost( anyString(), anyString(), anyString(), anyString() ) )
                 .thenThrow( IOException.class );

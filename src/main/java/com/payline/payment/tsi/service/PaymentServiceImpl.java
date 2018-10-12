@@ -1,6 +1,7 @@
 package com.payline.payment.tsi.service;
 
 import com.payline.payment.tsi.error.ErrorCodesMap;
+import com.payline.payment.tsi.exception.ExternalCommunicationException;
 import com.payline.payment.tsi.exception.InvalidRequestException;
 import com.payline.payment.tsi.request.TsiGoRequest;
 import com.payline.payment.tsi.response.TsiGoResponse;
@@ -36,7 +37,7 @@ public class PaymentServiceImpl extends AbstractPaymentHttpService<PaymentReques
     }
 
     @Override
-    public StringResponse createSendRequest(PaymentRequest paymentRequest ) throws IOException, InvalidRequestException, GeneralSecurityException, URISyntaxException {
+    public StringResponse createSendRequest(PaymentRequest paymentRequest ) throws IOException, InvalidRequestException, GeneralSecurityException, URISyntaxException, ExternalCommunicationException {
         // Create Go request from Payline request
         TsiGoRequest tsiGoRequest = requestBuilder.fromPaymentRequest( paymentRequest );
 
